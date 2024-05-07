@@ -2,6 +2,8 @@ package lt.mindaugas.androidrestapi.repository;
 
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,17 +22,20 @@ public class RemoteRepository {
         this.service = UserServiceClient.getInstance().create(UserDataService.class);
     }
 
-    public void fetchAllUsers() {
+    public MutableLiveData<UsersResponse> fetchAllUsers() {
         Map<String, String> requestParam = new HashMap<>();
         requestParam.put("page", "1");
         requestParam.put("per_page", "12");
+
+        MutableLiveData<UsersResponse> liveData = new MutableLiveData<>();
 
         service.getAllUsers(requestParam).enqueue(
                 new Callback<UsersResponse>() {
                     @Override
                     public void onResponse(Call<UsersResponse> call, Response<UsersResponse> response) {
-                        Log.i("tst_rest_api", "onResponse: " + response.body());
-                        Log.i("tst_rest_api", "onResponse: " + response.body().getUsers());
+                        if (response.isSuccessful()) {
+                            liveData.postValue(response.body());
+                        }
                     }
 
                     @Override
@@ -40,10 +45,10 @@ public class RemoteRepository {
                     }
                 }
         );
-
+        return liveData;
     }
 
-    public void fetchUserId(long userId){
+    public void fetchUserId(long userId) {
         service.getUser(userId).enqueue(
                 new Callback<UserResponse>() {
                     @Override
@@ -60,6 +65,4 @@ public class RemoteRepository {
                 }
         );
     }
-
-
 }
