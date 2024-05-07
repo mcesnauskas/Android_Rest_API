@@ -19,5 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
         RemoteRepository remoteRepository = new RemoteRepository();
         remoteRepository.fetchAllUsers();
+        remoteRepository.fetchUserId(1);
     }
 }
