@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    kotlin("kapt")
 }
 
 android {
@@ -51,4 +52,8 @@ dependencies {
 
     // glide
     implementation(libs.glide)
+
+    // lombok library
+    implementation(libs.lombok)
+    annotationProcessor(libs.lombok)
 }
