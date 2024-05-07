@@ -4,6 +4,11 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Data
 public class UsersResponse {
     @SerializedName("page")
     private int page;
