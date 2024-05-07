@@ -2,6 +2,9 @@ package lt.mindaugas.androidrestapi.network;
 
 import java.util.Map;
 
+import lt.mindaugas.androidrestapi.entity.UserResponse;
+import lt.mindaugas.androidrestapi.entity.UsersResponse;
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
