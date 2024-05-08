@@ -18,9 +18,9 @@ import lt.mindaugas.androidrestapi.entity.User;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
     private List<User> list;
-    private Context context;
-    private OnItemClickListener listener;
-    private OnItemLongClickListener longClickListener;
+    private final Context context;
+    private final OnItemClickListener listener;
+    private final OnItemLongClickListener longClickListener;
 
     public RecyclerAdapter(
             Context context,
@@ -47,7 +47,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
                         LayoutInflater.from(parent.getContext()), parent, false
                 );
 
-        return new ViewHolder(binding, context, listener, longClickListener);
+        return new ViewHolder(binding, listener, longClickListener);
     }
 
     @Override

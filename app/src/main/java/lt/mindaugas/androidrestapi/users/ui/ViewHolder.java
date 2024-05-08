@@ -21,7 +21,6 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public ViewHolder(
             @NonNull RecyclerviewItemBinding binding,
-            Context context,
             OnItemClickListener listener,
             OnItemLongClickListener longClickListener
     ) {
