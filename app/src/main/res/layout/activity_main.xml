@@ -7,10 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".users.ui.MainActivity">
 
-    <ListView
-        android:id="@+id/usersListView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/usersRecycleView"
+        android:layout_margin="8dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"/>
+        android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

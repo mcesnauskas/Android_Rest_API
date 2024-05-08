@@ -5,6 +5,7 @@ import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,11 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         setUpLiveDataObserver();
 
-        setUpListView();
+        setUpRecyclerView();
+    }
+
+    private void setUpRecyclerView() {
+        binding.usersRecycleView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void setUpLiveDataObserver() {
@@ -40,12 +45,5 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setUpListView() {
-        arrayAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                users
-        );
-        binding.usersListView.setAdapter(arrayAdapter);
-    }
+
 }
