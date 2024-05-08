@@ -10,16 +10,15 @@ import lt.mindaugas.androidrestapi.repository.RemoteRepository;
 
 public class UserDetailsViewModel extends ViewModel {
     @Getter
-    private final LiveData<UserResponse> userResponseLiveData;
+    private LiveData<UserResponse> userResponseLiveData = new MutableLiveData<>();
     private final RemoteRepository remoteRepository;
 
     public UserDetailsViewModel() {
         this.remoteRepository = new RemoteRepository();
-        this.userResponseLiveData = new MutableLiveData<>();
     }
 
-    public void requestUserResponse(long userId){
-        remoteRepository.fetchUser(userId);
+    public void requestUserResponse(long userId) {
+        userResponseLiveData = remoteRepository.fetchUser(userId);
     }
 
 }
