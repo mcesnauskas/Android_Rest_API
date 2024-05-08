@@ -16,6 +16,9 @@
         android:theme="@style/Theme.AndroidRestAPI"
         tools:targetApi="31">
         <activity
+            android:name=".user_details.UserDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".users.ui.MainActivity"
             android:exported="true">
             <intent-filter>
