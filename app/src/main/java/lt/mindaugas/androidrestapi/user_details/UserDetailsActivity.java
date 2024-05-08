@@ -17,7 +17,6 @@ public class UserDetailsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         long userId = getIntent().getLongExtra(MainActivity.MAIN_ACTIVITY_USER_ID, -1);
-
         binding.infoTextView.setText(String.valueOf(userId));
     }
 }

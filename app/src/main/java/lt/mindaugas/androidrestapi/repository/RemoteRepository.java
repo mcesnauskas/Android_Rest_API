@@ -65,4 +65,26 @@ public class RemoteRepository {
                 }
         );
     }
+
+    public MutableLiveData<UserResponse> fetchUser(long userId) {
+        MutableLiveData<UserResponse> liveData = new MutableLiveData<>();
+
+        service.getUser(userId).enqueue(
+                new Callback<UserResponse>() {
+                    @Override
+                    public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                        liveData.postValue(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserResponse> call, Throwable t) {
+                        Log.i("tst_rest_api", "Failed to retrieve data" + t.getMessage());
+                        call.cancel();
+                    }
+                }
+        );
+
+        return liveData;
+    }
+
 }
