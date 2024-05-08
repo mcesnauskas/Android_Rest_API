@@ -2,6 +2,7 @@ package lt.mindaugas.androidrestapi.users.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,16 +12,26 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import lt.mindaugas.androidrestapi.R;
 import lt.mindaugas.androidrestapi.databinding.RecyclerviewItemBinding;
 import lt.mindaugas.androidrestapi.entity.User;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
     private List<User> list;
     private Context context;
+    private OnItemClickListener listener;
+    private OnItemLongClickListener longClickListener;
 
-    public RecyclerAdapter(Context context, List<User> list){
+    public RecyclerAdapter(
+            Context context,
+            List<User> list,
+            OnItemClickListener listener,
+            OnItemLongClickListener longClickListener
+    ){
         this.context = context;
         this.list = list;
+        this.listener = listener;
+        this.longClickListener = longClickListener;
     }
 
     public void addList(List<User> list){
@@ -36,7 +47,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
                         LayoutInflater.from(parent.getContext()), parent, false
                 );
 
-        return new ViewHolder(binding, context);
+        return new ViewHolder(binding, context, listener, longClickListener);
     }
 
     @Override

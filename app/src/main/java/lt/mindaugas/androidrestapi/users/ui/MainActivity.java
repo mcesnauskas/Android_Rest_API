@@ -1,10 +1,13 @@
 package lt.mindaugas.androidrestapi.users.ui;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpRecyclerView() {
         binding.usersRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerAdapter = new RecyclerAdapter(this, users);
+        recyclerAdapter = new RecyclerAdapter(
+                this, users, this::onItemClick, this::onItemLongClick)
+        ;
         binding.usersRecycleView.setAdapter(recyclerAdapter);
     }
 
@@ -45,5 +50,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void onItemClick(int position) {
+        User user = users.get(position);
+        Snackbar
+                .make(binding.getRoot(), "Click: " + user.getFirstName(), Snackbar.LENGTH_LONG)
+                .show();
+
+    }
+
+    private void onItemLongClick(int position) {
+        User user = users.get(position);
+        Snackbar
+                .make(binding.getRoot(), "Long click: " + user.getFirstName(), Snackbar.LENGTH_LONG)
+                .show();
+
+    }
+
 
 }
