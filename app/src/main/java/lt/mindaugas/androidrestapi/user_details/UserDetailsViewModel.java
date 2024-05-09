@@ -3,6 +3,10 @@ package lt.mindaugas.androidrestapi.user_details;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import lombok.Getter;
 import lt.mindaugas.androidrestapi.entity.UserResponse;
 import lt.mindaugas.androidrestapi.repository.RemoteRepository;
@@ -14,10 +18,19 @@ public class UserDetailsViewModel extends ViewModel {
 
     public UserDetailsViewModel() {
         this.remoteRepository = new RemoteRepository();
-        userResponseLiveData = remoteRepository.getUserDetailsLiveData();
+        userResponseLiveData = new MutableLiveData<>();
     }
 
     public void requestUserResponse(long userId) {
-        remoteRepository.fetchUser(userId);
+//        userResponseLiveData = remoteRepository.fetchUser(userId);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            try {
+                UserResponse userResponse = remoteRepository.fetchUserConcurrent(userId).get();
+                userResponseLiveData.postValue(userResponse);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

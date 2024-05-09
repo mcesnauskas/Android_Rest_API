@@ -6,6 +6,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import lombok.Getter;
 import lt.mindaugas.androidrestapi.entity.UserResponse;
@@ -70,6 +73,14 @@ public class RemoteRepository {
         );
 
         return userDetailsLiveData;
+    }
+
+    public Future<UserResponse> fetchUserConcurrent(long userId) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        return executor.submit(() -> {
+            Response<UserResponse> response = service.getUser(userId).execute();
+            return response.isSuccessful() ? response.body() : null;
+        });
     }
 
 }
