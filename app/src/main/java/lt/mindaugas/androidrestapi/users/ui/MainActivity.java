@@ -2,7 +2,6 @@ package lt.mindaugas.androidrestapi.users.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -72,8 +71,5 @@ public class MainActivity extends AppCompatActivity {
         Snackbar
                 .make(binding.getRoot(), "Long click: " + user.getFirstName(), Snackbar.LENGTH_LONG)
                 .show();
-
     }
-
-
 }

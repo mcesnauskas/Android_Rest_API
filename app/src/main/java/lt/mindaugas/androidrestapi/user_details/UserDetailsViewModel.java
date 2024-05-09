@@ -22,11 +22,10 @@ public class UserDetailsViewModel extends ViewModel {
     }
 
     public void requestUserResponse(long userId) {
-//        userResponseLiveData = remoteRepository.fetchUser(userId);
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             try {
-                UserResponse userResponse = remoteRepository.fetchUserConcurrent(userId).get();
+                UserResponse userResponse = remoteRepository.fetchUser(userId).get();
                 userResponseLiveData.postValue(userResponse);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
