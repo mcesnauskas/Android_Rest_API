@@ -14,7 +14,7 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel() {
         remoteRepository = new RemoteRepository();
-        usersResponseLiveData = remoteRepository.fetchAllUsers();
+        usersResponseLiveData = remoteRepository.getUsersLiveData();
     }
 
     public void requestUsersResponse() {

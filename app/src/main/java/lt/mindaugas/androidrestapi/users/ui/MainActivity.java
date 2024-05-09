@@ -37,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
         setUpRecyclerView();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mainViewModel.requestUsersResponse();
+    }
+
     private void setUpRecyclerView() {
         binding.usersRecycleView.setLayoutManager(new LinearLayoutManager(this));
         recyclerAdapter = new RecyclerAdapter(

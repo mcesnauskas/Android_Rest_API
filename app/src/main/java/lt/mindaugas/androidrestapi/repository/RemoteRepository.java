@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.Getter;
 import lt.mindaugas.androidrestapi.entity.UserResponse;
 import lt.mindaugas.androidrestapi.entity.UsersResponse;
 import lt.mindaugas.androidrestapi.network.UserDataService;
@@ -17,6 +18,10 @@ import retrofit2.Response;
 
 public class RemoteRepository {
     private UserDataService service;
+    @Getter
+    private final MutableLiveData<UsersResponse> usersLiveData = new MutableLiveData<>();
+    @Getter
+    private final MutableLiveData<UserResponse> userDetailsLiveData = new MutableLiveData<>();
 
     public RemoteRepository() {
         this.service = UserServiceClient.getInstance().create(UserDataService.class);
@@ -27,14 +32,12 @@ public class RemoteRepository {
         requestParam.put("page", "1");
         requestParam.put("per_page", "12");
 
-        MutableLiveData<UsersResponse> liveData = new MutableLiveData<>();
-
         service.getAllUsers(requestParam).enqueue(
                 new Callback<UsersResponse>() {
                     @Override
                     public void onResponse(Call<UsersResponse> call, Response<UsersResponse> response) {
                         if (response.isSuccessful()) {
-                            liveData.postValue(response.body());
+                            usersLiveData.postValue(response.body());
                         }
                     }
 
@@ -45,17 +48,17 @@ public class RemoteRepository {
                     }
                 }
         );
-        return liveData;
+        return usersLiveData;
     }
 
     public MutableLiveData<UserResponse> fetchUser(long userId) {
-        MutableLiveData<UserResponse> liveData = new MutableLiveData<>();
-
         service.getUser(userId).enqueue(
                 new Callback<UserResponse>() {
                     @Override
                     public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                        liveData.postValue(response.body());
+                        if (response.isSuccessful()) {
+                            userDetailsLiveData.postValue(response.body());
+                        }
                     }
 
                     @Override
@@ -66,7 +69,7 @@ public class RemoteRepository {
                 }
         );
 
-        return liveData;
+        return userDetailsLiveData;
     }
 
 }
