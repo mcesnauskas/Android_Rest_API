@@ -3,9 +3,11 @@ package lt.mindaugas.androidrestapi.users.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -22,16 +24,19 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mainViewModel = null;
     private ActivityMainBinding binding;
     private RecyclerAdapter recyclerAdapter;
+    private boolean requiredData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        requiredData = true;
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         setUpLiveDataObserver();
         setUpRecyclerView();
+        scrollOnRecyclerView();
     }
 
     @Override
@@ -48,12 +53,40 @@ public class MainActivity extends AppCompatActivity {
         binding.usersRecycleView.setAdapter(recyclerAdapter);
     }
 
+    private void scrollOnRecyclerView() {
+        LinearLayoutManager linearLayoutManager =
+                (LinearLayoutManager) binding.usersRecycleView.getLayoutManager();
+
+        RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int totalItemCount = linearLayoutManager.getItemCount();
+                int visibleItemCount = linearLayoutManager.getChildCount();
+                int fistVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                if (fistVisibleItem + visibleItemCount >= totalItemCount - 2) {
+//                    Snackbar.make(recyclerView, "scroled to " + totalItemCount, Snackbar.LENGTH_LONG
+//                    ).show();
+                    requiredData = true;
+                    mainViewModel.requestUsersResponse();
+                }
+            }
+        };
+
+        if (binding.usersRecycleView != null){
+            binding.usersRecycleView.removeOnScrollListener(scrollListener);
+        }
+        binding.usersRecycleView.addOnScrollListener(scrollListener);
+    }
+
     private void setUpLiveDataObserver() {
         mainViewModel.getUsersResponseLiveData().observe(this, usersResponse -> {
             if (usersResponse != null) {
                 if (recyclerAdapter != null) {
-                    if (recyclerAdapter.getItemCount() == 0) {
+                    if (recyclerAdapter.getItemCount() == 0 || requiredData) {
                         recyclerAdapter.addList(usersResponse.getUsers());
+                        requiredData = false;
                     }
                 }
             }
