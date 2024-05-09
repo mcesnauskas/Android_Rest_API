@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mainViewModel = null;
     private ActivityMainBinding binding;
     private RecyclerAdapter recyclerAdapter;
-    private final List<User> users = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         setUpLiveDataObserver();
-
         setUpRecyclerView();
     }
 
@@ -45,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpRecyclerView() {
         binding.usersRecycleView.setLayoutManager(new LinearLayoutManager(this));
         recyclerAdapter = new RecyclerAdapter(
-                this, users, this::onItemClick, this::onItemLongClick)
+                this, this::onItemClick, this::onItemLongClick)
         ;
         binding.usersRecycleView.setAdapter(recyclerAdapter);
     }
@@ -53,21 +51,23 @@ public class MainActivity extends AppCompatActivity {
     private void setUpLiveDataObserver() {
         mainViewModel.getUsersResponseLiveData().observe(this, usersResponse -> {
             if (usersResponse != null) {
-                users.addAll(usersResponse.getUsers());
-                recyclerAdapter.addList(users);
+                if (recyclerAdapter != null) {
+                    if (recyclerAdapter.getItemCount() == 0) {
+                        recyclerAdapter.addList(usersResponse.getUsers());
+                    }
+                }
             }
         });
     }
 
     private void onItemClick(int position) {
-        User user = users.get(position);
         Intent intent = new Intent(this, UserDetailsActivity.class);
-        intent.putExtra(MAIN_ACTIVITY_USER_ID, user.getId());
+        intent.putExtra(MAIN_ACTIVITY_USER_ID, recyclerAdapter.getUserByPosition(position));
         startActivity(intent);
     }
 
     private void onItemLongClick(int position) {
-        User user = users.get(position);
+        User user = recyclerAdapter.getUserDetails(position);
         Snackbar
                 .make(binding.getRoot(), "Long click: " + user.getFirstName(), Snackbar.LENGTH_LONG)
                 .show();

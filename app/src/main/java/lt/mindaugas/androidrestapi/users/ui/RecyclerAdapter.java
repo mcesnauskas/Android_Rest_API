@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lt.mindaugas.androidrestapi.R;
@@ -24,19 +25,26 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     public RecyclerAdapter(
             Context context,
-            List<User> list,
             OnItemClickListener listener,
             OnItemLongClickListener longClickListener
-    ){
+    ) {
         this.context = context;
-        this.list = list;
         this.listener = listener;
         this.longClickListener = longClickListener;
+        this.list = new ArrayList<>();
     }
 
-    public void addList(List<User> list){
-        this.list = list;
+    public void addList(List<User> list) {
+        this.list.addAll(list);
         notifyDataSetChanged();
+    }
+
+    public long getUserByPosition(int position) {
+        return list.get(position).getId();
+    }
+
+    public User getUserDetails(int position) {
+        return list.get(position);
     }
 
     @NonNull

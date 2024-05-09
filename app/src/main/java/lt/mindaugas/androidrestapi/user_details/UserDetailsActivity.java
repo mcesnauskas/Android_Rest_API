@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+
 import lt.mindaugas.androidrestapi.databinding.ActivityUserDetailsBinding;
 import lt.mindaugas.androidrestapi.users.MainViewModel;
 import lt.mindaugas.androidrestapi.users.ui.MainActivity;
@@ -24,6 +26,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         userId = getIntent().getLongExtra(MainActivity.MAIN_ACTIVITY_USER_ID, -1);
 
         setUpLiveDataObserver();
+        clickOnButtonClose();
     }
 
     @Override
@@ -35,8 +38,18 @@ public class UserDetailsActivity extends AppCompatActivity {
     private void setUpLiveDataObserver() {
         viewModel.getUserResponseLiveData().observe(this, userResponse -> {
             if (userResponse != null){
-                binding.infoTextView.setText(userResponse.getUser().toString());
+                binding.userFirstNameTextView.setText(userResponse.getUser().getFirstName());
+                binding.userLastNameTextView.setText(userResponse.getUser().getLastName());
+                binding.userEmailTextView.setText(userResponse.getUser().getEmail());
+
+                Glide.with(this)
+                        .load(userResponse.getUser().getAvatar())
+                        .into(binding.userImageView);
             }
         });
+    }
+
+    private void clickOnButtonClose() {
+        binding.userCloseButton.setOnClickListener(v -> finish());
     }
 }
